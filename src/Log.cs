@@ -26,7 +26,7 @@ internal class Log
     }
 
     [Conditional("Debug")]
-    public static void DevelopmentOnly(string message) => Logger!.LogInfo($"{message}");
+    public static void DevelopmentOnly(string message) => Logger!.LogWarning($"{message}");
 
     public static void Debug(string message) => Logger!.LogInfo($"{message}");
 

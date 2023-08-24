@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using LessZdoCorruption.Fixes;
 using Cfg = LessZdoCorruption.Config;
@@ -19,15 +20,23 @@ public class Plugin : BaseUnityPlugin
 
         var harmony = new Harmony(ModId);
 
-        if (Cfg.SpawnSystem_LessRecords.Value)
+        Toggle(Cfg.SpawnSystem_LessRecords, LessSpawnSystemRecords.Enable, nameof(LessSpawnSystemRecords));
+        Toggle(Cfg.RandEvent_Cleanup, RandEventSpawnSystemCleanup.Enable, nameof(RandEventSpawnSystemCleanup));
+        Toggle(Cfg.Zdo_BlockOverflow, ZdoBlockOverflow.Enable, nameof(ZdoBlockOverflow));
+        Toggle(Cfg.ZnetScene_RemoveObject_Cleanup, ZNetSceneRemoveObjectsCleanup.Enable, nameof(ZNetSceneRemoveObjectsCleanup));
+
+        void Toggle(ConfigEntry<bool> cfg, Action<Harmony> fix, string name)
         {
-            try
+            if (cfg.Value)
             {
-                LessSpawnSystemRecords.EnableFix(harmony);
-            }
-            catch (Exception e)
-            {
-                Log.Warning($"Failed to apply fix '{nameof(LessSpawnSystemRecords)}'. Skipping fix.", e);
+                try
+                {
+                    fix(harmony);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Failed to apply fix '{name}'. Skipping fix.", e);
+                }
             }
         }
     }

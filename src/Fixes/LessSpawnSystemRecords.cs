@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿//#define Verbose
+
+using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using LessZdoCorruption.Extensions;
@@ -27,7 +29,7 @@ internal static class LessSpawnSystemRecords
     private static SpawnSystem? CurrentInstance { get; set; }
     private static DateTime? CurrentTime { get; set; }
 
-    internal static void EnableFix(Harmony harmony)
+    internal static void Enable(Harmony harmony)
     {
         harmony.Patch(
             Method_SpawnSystem_UpdateSpawnList,
@@ -37,7 +39,7 @@ internal static class LessSpawnSystemRecords
             Method_SpawnSystem_UpdateSpawnList,
             transpiler: new HarmonyMethod(Method_LessSpawnSystemRecords_MoveSpawnTimeCode));
 
-#if DEBUG
+#if DEBUG && Verbose
         harmony.Patch(
             Method_SpawnSystem_UpdateSpawnList,
             transpiler: new HarmonyMethod(AccessTools.Method(typeof(LessSpawnSystemRecords), nameof(DebugTranspiler))));
@@ -92,7 +94,7 @@ internal static class LessSpawnSystemRecords
             {
                 CurrentInstance.m_nview.GetZDO().Set(stableHashCode, CurrentTime.Value.Ticks);
 
-#if DEBUG
+#if DEBUG && Verbose
                 Log.Warning("Stored time: " + CurrentTime);
 #endif
             }
