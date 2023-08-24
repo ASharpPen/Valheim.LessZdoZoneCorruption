@@ -1,0 +1,101 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net471</TargetFramework>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>0.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Libs\**" />
+    <EmbeddedResource Remove="Libs\**" />
+    <None Remove="Libs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<Using Remove="System.Net.Http" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="assembly_utils">
+      <HintPath>Libs\Valheim\assembly_utils.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_valheim">
+      <HintPath>Libs\Valheim\assembly_valheim.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>Libs\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>Libs\Unity\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>Libs\Unity\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>Libs\Unity\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Libs\Unity\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+	<Target Name="PropagateVersionNumber" BeforeTargets="Build" Condition="'$(Configuration)'=='Release'">
+
+		<PropertyGroup>
+			<RepoDir>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(MSBuildProjectDirectory),'..'))))</RepoDir>
+			<ThunderStoreDir>$([System.IO.Path]::Combine($(RepoDir),'Thunderstore'))</ThunderStoreDir>
+
+			<Manifest>$([System.IO.Path]::Combine($(ThunderStoreDir),'manifest.json'))</Manifest>
+			<PluginFile>$([System.IO.Path]::Combine($(MSBuildProjectDirectory),'Plugin.cs'))</PluginFile>
+		</PropertyGroup>
+
+		<Message Text="Replacing manifest version: $([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText($(Manifest))),'version_number&quot;.+')) with '$(Version)'" Importance="high" />
+
+		<WriteLinesToFile File="$(Manifest)" Lines="$([System.Text.RegularExpressions.Regex]::Replace($([System.IO.File]::ReadAllText($(Manifest))),'version_number&quot;.+','version_number&quot;: &quot;$(Version)&quot;,'))" Overwrite="true" Encoding="UTF-8" />
+
+		<Message Text="Replacing plugin version: $([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText($(PluginFile))),'Version\s?=\s?&quot;.+&quot;')) with '$(Version)'" Importance="high" />
+
+		<WriteLinesToFile File="$(PluginFile)" Lines="$([System.Text.RegularExpressions.Regex]::Replace($([System.IO.File]::ReadAllText($(PluginFile))),'Version\s?=\s?&quot;.+&quot;','Version = &quot;$(Version)&quot;'))" Overwrite="true" Encoding="UTF-8" />
+
+	</Target>
+
+	<Target Name="PrepareReleaseArtifacts" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
+
+		<PropertyGroup>
+			<ReleaseName>LessZdoCorruption_v$(Version)</ReleaseName>
+			<OutputNugetDir>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(OutputDir),'..'))))</OutputNugetDir>
+			<RepoDir>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(MSBuildProjectDirectory),'..'))))</RepoDir>
+			<ThunderStoreDir>$([System.IO.Path]::Combine($(RepoDir),'Thunderstore'))</ThunderStoreDir>
+			<ReleaseDir>$([System.IO.Path]::Combine($(ThunderstoreDir),$(ReleaseName)))</ReleaseDir>
+			<BuildConfigurationDir>$([System.IO.Path]::Combine($(BaseOutputPath),$(Configuration)))</BuildConfigurationDir>
+
+			<Dll>$(OutputPath)$(AssemblyName).dll</Dll>
+			<Readme>$([System.IO.Path]::Combine($(RepoDir),'README.md'))</Readme>
+			<Icon>$([System.IO.Path]::Combine($(ThunderStoreDir),'icon.png'))</Icon>
+			<Manifest>$([System.IO.Path]::Combine($(ThunderStoreDir),'manifest.json'))</Manifest>
+			
+	    </PropertyGroup>
+
+		<Message Text="Preparing release '$(ReleaseDir)'" Importance="high" />
+
+		<RemoveDir Directories="$(ReleaseDir)" />
+		<MakeDir Directories="$(ReleaseDir)" />
+
+		<Copy SourceFiles="$(Dll);$(Readme);$(Icon);$(Manifest)" DestinationFolder="$(ReleaseDir)" />
+
+		<ZipDirectory SourceDirectory="$(ReleaseDir)" Overwrite="true" DestinationFile="$([System.IO.Path]::Combine($(ThunderStoreDir),'$(ReleaseName).zip'))" />
+
+		<Move SourceFiles="$([System.IO.Path]::Combine($(ThunderStoreDir),'$(ReleaseName).zip'))" DestinationFiles="$([System.IO.Path]::Combine($(ReleaseDir),'$(ReleaseName).zip'))" />
+	</Target>
+</Project>
