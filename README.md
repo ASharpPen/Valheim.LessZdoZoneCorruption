@@ -1,6 +1,6 @@
 # Less Zdo Corruption
 
-A collection of various fixes attempted to resolve Valheims issue with save-data.
+A collection of various fixes and mitigations attempting to resolve Valheims issues with save-data.
 
 Valheim recently started having a specific limit of how many data entries can be in each entity that is persisted or syncronized. This results in issues due to the code not taking into account that modded games might cause the vanilla code to start storing a lot more information than expected.
 

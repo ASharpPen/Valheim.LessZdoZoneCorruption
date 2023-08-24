@@ -1,8 +1,8 @@
 ﻿{
   "name": "Less_Zdo_Corruption",
-  "version_number": "0.0.1",
+  "version_number": "1.0.0",
   "website_url": "https://github.com/ASharpPen/Valheim.LessZdoZoneCorruption",
-  "description": "Collection of fixes for data corruption in modded games",
+  "description": "Collection of fixes and mitigations for data corruption in modded games.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2105"
   ]
