@@ -11,16 +11,6 @@ internal static class Config
     {
         File = file;
 
-        SpawnSystem_LessRecords = file.Bind(
-            "SpawnSystem - Less Records", 
-            "Enabled", 
-            true, 
-            "Toggles fix for SpawnSystem (the handler for natural- and raid spawning) that moves \n" +
-            "storing timestamps in the zone's ZDO to after check for spawning allowed.\n" +
-            "Intended for avoiding storage of a large number of timestamps for things \n" +
-            "that has no chance of spawning, and could otherwise overload the max limit of data.\n" +
-            "Restart required to take effect.");
-
         RandEvent_Cleanup = file.Bind(
             "RandEventSystem - Cleanup",
             "Enabled",
@@ -60,8 +50,6 @@ internal static class Config
             "Attempts will be made to help identify the cause.\n" +
             "Restart not necessary.");
     }
-
-    public static ConfigEntry<bool> SpawnSystem_LessRecords { get; set; }
 
     public static ConfigEntry<bool> RandEvent_Cleanup { get; set; }
 
