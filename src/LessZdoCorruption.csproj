@@ -82,17 +82,18 @@
 
 			<Dll>$(OutputPath)$(AssemblyName).dll</Dll>
 			<Readme>$([System.IO.Path]::Combine($(RepoDir),'README.md'))</Readme>
+			<Changelog>$([System.IO.Path]::Combine($(RepoDir),'CHANGELOG.md'))</Changelog>
 			<Icon>$([System.IO.Path]::Combine($(ThunderStoreDir),'icon.png'))</Icon>
 			<Manifest>$([System.IO.Path]::Combine($(ThunderStoreDir),'manifest.json'))</Manifest>
-			
-	    </PropertyGroup>
+
+		</PropertyGroup>
 
 		<Message Text="Preparing release '$(ReleaseDir)'" Importance="high" />
 
 		<RemoveDir Directories="$(ReleaseDir)" />
 		<MakeDir Directories="$(ReleaseDir)" />
 
-		<Copy SourceFiles="$(Dll);$(Readme);$(Icon);$(Manifest)" DestinationFolder="$(ReleaseDir)" />
+		<Copy SourceFiles="$(Dll);$(Readme);$(Icon);$(Manifest);$(Changelog)" DestinationFolder="$(ReleaseDir)" />
 
 		<ZipDirectory SourceDirectory="$(ReleaseDir)" Overwrite="true" DestinationFile="$([System.IO.Path]::Combine($(ThunderStoreDir),'$(ReleaseName).zip'))" />
 
