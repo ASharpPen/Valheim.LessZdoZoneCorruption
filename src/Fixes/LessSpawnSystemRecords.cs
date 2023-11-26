@@ -16,6 +16,7 @@ namespace LessZdoCorruption.Fixes;
 /// that adds the timestamp to slightly later in the workflow, so that
 /// only entries that actually can spawn will record the time.
 /// </summary>
+[Obsolete("Deprecated. Feature is too simple and ends up causing more spawn chance checks than expected.")]
 internal static class LessSpawnSystemRecords
 {
     private static MethodInfo Method_ZDO_Set_IntLong = AccessTools.Method(typeof(ZDO), nameof(ZDO.Set), new[] {typeof(int), typeof(long) });
@@ -31,6 +32,7 @@ internal static class LessSpawnSystemRecords
 
     internal static void Enable(Harmony harmony)
     {
+        /*
         harmony.Patch(
             Method_SpawnSystem_UpdateSpawnList,
             prefix: new HarmonyMethod(AccessTools.Method(typeof(LessSpawnSystemRecords), nameof(Init))));
@@ -38,6 +40,7 @@ internal static class LessSpawnSystemRecords
         harmony.Patch(
             Method_SpawnSystem_UpdateSpawnList,
             transpiler: new HarmonyMethod(Method_LessSpawnSystemRecords_MoveSpawnTimeCode));
+        */
 
 #if DEBUG && Verbose
         harmony.Patch(

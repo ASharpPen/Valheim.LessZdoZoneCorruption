@@ -12,13 +12,6 @@ The mod is intended to run client-side.
 
 # Fixes
 
-## SpawnSystem - Less Records
-
-Each zone stores a timestamp for each creature that can spawn naturally, as well as for each raid-creature. The only filter is creatures that are not set to spawn in that biome.
-This solution moves the timestamp storage to happen later in the code, so that more checks can happen before (like environmental conditions, or additionally modded ones like from Spawn That).
-
-This doesn't necessarily fix all scenarios with too many records, but it should help mitigate the problem.
-
 ## RandEventSystem - Cleanup
 
 When any event (eg., a raid or a boss fight) is run, the SpawnSystem is used for actually spawning in most creatures. This means it will slowly pollute the local zone storage with more and more timestamps about what spawned when.

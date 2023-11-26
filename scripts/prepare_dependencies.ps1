@@ -9,7 +9,7 @@ $outputDir =
 $profilePath = 
 
 # Path to Valheim main folder for getting the game dlls.
-$additionalDependenciesDir = "D:\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed"
+$valheimPath = "D:\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed"
 
 function Strip
 {
@@ -42,10 +42,10 @@ function Strip
   }
 
   if($Publicize) { 
-    & .\Nstrip.exe -p -cg -d $additionalDependenciesDir $Source $out
+    & .\Nstrip.exe -p -cg -d $valheimPath $Source $out
   }
   else {
-    & .\Nstrip.exe -cg -d $additionalDependenciesDir $Source $out
+    & .\Nstrip.exe -cg -d $valheimPath $Source $out
   }
   
   Write-Host "-Source $Source -TargetDir $out"
@@ -80,14 +80,14 @@ function CopyFile
 }
 
 # Valheim
-Strip "$additionalDependenciesDir\assembly_valheim.dll" "Valheim" -Publicize
-Strip "$additionalDependenciesDir\assembly_utils.dll" "Valheim" -Publicize
+Strip "$valheimPath\assembly_valheim.dll" "Valheim" -Publicize
+Strip "$valheimPath\assembly_utils.dll" "Valheim" -Publicize
 
-# Unit
-CopyFile "$profilePath\unstripped_corlib\UnityEngine.dll" "Unity"
-CopyFile "$profilePath\unstripped_corlib\UnityEngine.CoreModule.dll" "Unity"
-CopyFile "$profilePath\unstripped_corlib\UnityEngine.PhysicsModule.dll" "Unity"
-CopyFile "$profilePath\unstripped_corlib\UnityEngine.ImageConversionModule.dll" "Unity"
-CopyFile "$profilePath\unstripped_corlib\UnityEngine.UI.dll" "Unity"
+# Unity
+CopyFile "$valheimPath\UnityEngine.dll" "Unity"
+CopyFile "$valheimPath\UnityEngine.CoreModule.dll" "Unity"
+CopyFile "$valheimPath\UnityEngine.PhysicsModule.dll" "Unity"
+CopyFile "$valheimPath\UnityEngine.ImageConversionModule.dll" "Unity"
+CopyFile "$valheimPath\UnityEngine.UI.dll" "Unity"
 
 Write-Host "Done"

@@ -11,7 +11,7 @@ public class Plugin : BaseUnityPlugin
 {
     public const string ModId = "LessZdoCorruption";
     public const string PluginName = "Less ZDO Corruption";
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
 
     private void Awake()
     {
@@ -20,7 +20,6 @@ public class Plugin : BaseUnityPlugin
 
         var harmony = new Harmony(ModId);
 
-        Toggle(Cfg.SpawnSystem_LessRecords, LessSpawnSystemRecords.Enable, nameof(LessSpawnSystemRecords));
         Toggle(Cfg.RandEvent_Cleanup, RandEventSpawnSystemCleanup.Enable, nameof(RandEventSpawnSystemCleanup));
         Toggle(Cfg.Zdo_BlockOverflow, ZdoBlockOverflow.Enable, nameof(ZdoBlockOverflow));
         Toggle(Cfg.ZnetScene_RemoveObject_Cleanup, ZNetSceneRemoveObjectsCleanup.Enable, nameof(ZNetSceneRemoveObjectsCleanup));
